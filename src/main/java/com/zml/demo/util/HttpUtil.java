@@ -1,4 +1,4 @@
-/**
+package com.zml.demo.util; /**
  * @author: zhumlu@yonyou.com
  * @date: 2022/2/26 16:52
  * @description:
@@ -249,6 +249,8 @@ public class HttpUtil {
         if (params!=null) {
             HttpEntity paramEntity = new StringEntity(JSON.toJSONString(params), StandardCharsets.UTF_8);
             httpPost.setEntity(paramEntity);
+//            httpPost.setHeader("Content-Length",paramEntity.getContentLength()+"");
+
         }
 
         CloseableHttpResponse response = null;
@@ -260,6 +262,12 @@ public class HttpUtil {
                 return EntityUtils.toString(entity, StandardCharsets.UTF_8);
             } else {
                 log.error("请求地址({})失败:{}", url, statusCode);
+                HttpEntity entity = response.getEntity();
+                if(entity!=null){
+                    String s = EntityUtils.toString(entity, StandardCharsets.UTF_8);
+                    log.error("返回信息:{}", s);
+                }
+
             }
         } catch (IOException e) {
             log.error("请求地址({})失败", url, e);

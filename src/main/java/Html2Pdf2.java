@@ -2,6 +2,8 @@ import com.spire.pdf.graphics.PdfMargins;
 import com.spire.pdf.htmlconverter.LoadHtmlType;
 import com.spire.pdf.htmlconverter.qt.HtmlConverter;
 import com.spire.pdf.htmlconverter.qt.Size;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,15 +16,17 @@ import java.io.IOException;
  * @description:
  */
 public class Html2Pdf2 {
-    public static void main(String[] args) throws Exception{
+    public static Logger log  = LoggerFactory.getLogger(Html2Pdf2.class);
+    public static void convert(String htmlString){
         //调用自定义方法HtmlToString()将HTML文件转换为字符串
-        String htmlString = HtmlToString("C: \\Users\\Administrator\\Desktop\\Sample.html");
+//        String htmlString = HtmlToString("C: \\Users\\Administrator\\Desktop\\Sample.html");
 
+        log.info("pdf内容:{}",htmlString);
         //指定输出文档路径
         String outputFile = "output/HtmlToPdf.pdf";
 
         //指定插件路径
-        String pluginPath = "F: \\Libraries\\plugins-windows-x64\\plugins";
+        String pluginPath = "D:\\Program Files\\plugins-windows-x64\\plugins";
 
         //设置插件路径
         HtmlConverter.setPluginPath(pluginPath);
@@ -45,5 +49,21 @@ public class Html2Pdf2 {
         bufferedReader.close();
         String str = stringBuilder.toString();
         return str;
+    }
+
+    public static void main(String[] args) throws IOException {
+        String htmlString = HtmlToString("D:/github_projects/geektime_download/output/test.html");
+//        System.out.println("pdf内容");
+        log.info("pdf内容:{}",htmlString);
+        //指定输出文档路径
+        String outputFile = "output/HtmlToPdf.pdf";
+
+        //指定插件路径
+        String pluginPath = "D:\\Program Files\\plugins-windows-x64\\plugins";
+
+        //设置插件路径
+        HtmlConverter.setPluginPath(pluginPath);
+        //将HTML字符串转换为PDF
+        HtmlConverter.convert(htmlString, outputFile, true, 100000, new Size(700, 900), new PdfMargins(0), LoadHtmlType.Source_Code);
     }
 }

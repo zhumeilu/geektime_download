@@ -16,6 +16,12 @@
     <dependencies>
         <dependency>
             <groupId> e-iceblue </groupId>
+            <artifactId>spire.doc</artifactId>
+            <version>3.9.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId> e-iceblue </groupId>
             <artifactId>spire.pdf</artifactId>
             <version>3.11.6</version>
         </dependency>
@@ -49,6 +55,11 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.overzealous</groupId>
+            <artifactId>remark</artifactId>
+            <version>1.1.0</version>
         </dependency>
     </dependencies>
 
