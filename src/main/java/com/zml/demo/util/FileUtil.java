@@ -38,11 +38,25 @@ public class FileUtil {
 
     }
 
+    public static boolean isExist(String path, String fileName) {
+        fileName = replace(fileName);
+        String pathName = path + File.separator + fileName;
+        try {
+            File file = new File(pathName);
+            if (file.exists()) {
+                return true;
+            }
+        } catch (Exception e) {
+            log.error("读取文件异常:", e);
+        }
+        return false;
+    }
+
     public static String filter(String str) {
         return str == null ? null : FilePattern.matcher(str).replaceAll("");
     }
 
     public static String replace(String str) {
-        return str.replace("|","_").replace("｜","").replace(" ","");
+        return str.replace("|", "_").replace("｜", "").replace(" ", "").replace("/", "");
     }
 }

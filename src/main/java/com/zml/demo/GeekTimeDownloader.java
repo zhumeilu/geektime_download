@@ -25,9 +25,9 @@ public class GeekTimeDownloader {
     public static final String articlesUrl = "https://time.geekbang.org/serv/v1/column/articles";
     public static final String infoUrl = "https://time.geekbang.org/serv/v3/column/info";
     public static String cookies = CommonConstant.cookies;
-    public static final String cid = "100006601";
+    public static final String cid = "100026001";
     public static final String filePath = "D:\\github_projects\\geektime_download\\article";
-    public static final Integer interval = 1000;
+    public static final Integer interval = 2000;
 
     public static void main(String[] args) {
         articles(cid);
@@ -51,20 +51,25 @@ public class GeekTimeDownloader {
         JSONArray list = dataJSON.getJSONArray("list");
         //文件目录
         String path = filePath + File.separator + info;
-//        File file = new File(path+File.separator+getFileName("00  "+info));
-        StringBuilder sb = new StringBuilder();
-        sb.append("# ").append(info).append("\n");
-        //制作目录
-        list.forEach(obj -> {
-            JSONObject jsonObject1 = (JSONObject) obj;
-            String id = jsonObject1.getString("id");
-            String article_title = jsonObject1.getString("article_title");
-            String fileName = getFileName(article_title);
-            sb.append("* ").append("[").append(fileName).append("]").append("(").append("./").append(fileName).append(")").append("\n");
-        });
-        String head = getFileName("00_" + info);
-        FileUtil.write(sb.toString(), path, head);
-        log.info("保存:{}成功!", head);
+        String head = getFileName("00_目录");
+        if(!FileUtil.isExist(path,head)){
+            StringBuilder sb = new StringBuilder();
+            sb.append("# ").append(info).append("\n");
+            //制作目录
+            list.forEach(obj -> {
+                JSONObject jsonObject1 = (JSONObject) obj;
+                String id = jsonObject1.getString("id");
+                String article_title = jsonObject1.getString("article_title");
+                String fileName = getFileName(article_title);
+                sb.append("* ").append("[").append(fileName).append("]").append("(").append("./").append(fileName).append(")").append("\n");
+            });
+
+            FileUtil.write(sb.toString(), path, head);
+            log.info("保存:{}成功!", head);
+        }else{
+            log.info("{}已存在，跳过!", head);
+        }
+
 
         //循环生成文章
         list.forEach(obj -> {
@@ -74,14 +79,21 @@ public class GeekTimeDownloader {
 
             String audio_download_url = jsonObject1.getString("audio_download_url");
             String audio_title = jsonObject1.getString("audio_title");
-            String article = article(id);
+
             //文件名
             String fileName = getFileName(article_title);
+            if(!FileUtil.isExist(path,fileName)){
+                String fileNamePath = path + File.separator + fileName;
+                String article = article(id);
+                Html2MDUtil.convert(article, fileNamePath, true);
+                log.info("保存:{}成功!", fileName);
+            }else{
+                log.info("{}已存在，跳过!", fileName);
+            }
 //            com.zml.demo.utils.FileUtils.write(article,path,fileName);
-            String fileNamePath = path + File.separator + fileName;
-            Html2MDUtil.convert(article, fileNamePath, true);
-            log.info("保存:{}成功!", fileName);
+
         });
+        log.info("完成!");
     }
 
     public static String getFileName(String title) {
